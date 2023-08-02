@@ -80,6 +80,17 @@ public class Publisher {
         String targetUrl = repositoryUrl + filename;
         LOG.info("Uploading " + targetUrl);
 
+        HttpRequest check = Utils.setCredentials(HttpRequest.newBuilder(), username, password)
+                .uri(URI.create(targetUrl))
+                .GET()
+                .build();
+
+        HttpResponse<String> checkResponse = httpClient.send(check, BodyHandlers.ofString());
+        if (checkResponse.statusCode() >= 200 && checkResponse.statusCode() < 399) {
+            LOG.debug("Skipping duplicate upload " + targetUrl + " : Response code was " + checkResponse.statusCode());
+            return;
+        }
+
         // Utils.sleep(1000);
         HttpRequest request = Utils.setCredentials(HttpRequest.newBuilder(), username, password)
                 .uri(URI.create(targetUrl))
