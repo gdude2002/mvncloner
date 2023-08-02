@@ -50,7 +50,7 @@ public class Publisher {
     }
 
     public void publishDirectory(HttpClient httpClient, String repositoryUrl, Path mirrorPath)
-        throws IOException, InterruptedException {
+            throws IOException, InterruptedException {
 
         LOG.debug("Switching to mirror directory: " + mirrorPath.toAbsolutePath());
 
@@ -74,23 +74,23 @@ public class Publisher {
     }
 
     private void handleFile(HttpClient httpClient, String repositoryUrl, Path path)
-        throws IOException, InterruptedException {
+            throws IOException, InterruptedException {
 
         String filename = path.getFileName().toString();
         String targetUrl = repositoryUrl + filename;
         LOG.info("Uploading " + targetUrl);
 
-        Utils.sleep(1000);
+        // Utils.sleep(1000);
         HttpRequest request = Utils.setCredentials(HttpRequest.newBuilder(), username, password)
-            .uri(URI.create(targetUrl))
-            .PUT(BodyPublishers.ofInputStream(() -> {
-                try {
-                    return Files.newInputStream(path, StandardOpenOption.READ);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }))
-            .build();
+                .uri(URI.create(targetUrl))
+                .PUT(BodyPublishers.ofInputStream(() -> {
+                    try {
+                        return Files.newInputStream(path, StandardOpenOption.READ);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }))
+                .build();
         HttpResponse<String> response = httpClient.send(request, BodyHandlers.ofString());
         if (response.statusCode() < 200 || response.statusCode() > 299) {
             LOG.error("Error uploading " + targetUrl + " : Response code was " + response.statusCode());

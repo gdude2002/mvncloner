@@ -43,10 +43,10 @@ public class Scraper {
     private static final Pattern FILE_URL_PATTERN = Pattern.compile("^.*/([^/]+\\.([^\\./]{1,6}))$");
 
     private static Set<String> EXTENSION_BLACKLIST = new HashSet<>(
-        Arrays.asList("md5", "sha1", "asc", "sha256", "sha512"));
+            Arrays.asList("md5", "sha1", "asc", "sha256", "sha512"));
 
     private static Set<String> FILENAME_BLACKLIST = new HashSet<>(
-        Arrays.asList("maven-metadata.xml", "archetype-catalog.xml"));
+            Arrays.asList("maven-metadata.xml", "archetype-catalog.xml"));
 
     @Value("${source.root-url}")
     private String rootUrl;
@@ -71,7 +71,7 @@ public class Scraper {
                 InetSocketAddress proxyAddress = (InetSocketAddress) theProxy.address();
                 if (proxyAddress != null) {
                     webClient.getOptions()
-                        .setProxyConfig(new ProxyConfig(proxyAddress.getHostName(), proxyAddress.getPort()));
+                            .setProxyConfig(new ProxyConfig(proxyAddress.getHostName(), proxyAddress.getPort()));
                 }
             });
             // Set credentials
@@ -86,7 +86,7 @@ public class Scraper {
     }
 
     private void processIndexUrl(WebClient webClient, String pageUrl, Path mirrorPath)
-        throws IOException, URISyntaxException {
+            throws IOException, URISyntaxException {
         LOG.debug("Switching to mirror directory: " + mirrorPath.toAbsolutePath().toString());
         Files.createDirectories(mirrorPath);
 
@@ -130,7 +130,7 @@ public class Scraper {
             URI base = new URI(pageUrl);
             String relativePath = StringUtils.strip(base.relativize(new URI(fullyQualifiedUrl)).toString(), "/ ");
             LOG.debug("   Recursing into: " + relativePath);
-            Utils.sleep(1000);
+            // Utils.sleep(1000);
             processIndexUrl(webClient, fullyQualifiedUrl, mirrorPath.resolve(relativePath));
         }
     }
@@ -150,7 +150,7 @@ public class Scraper {
             if (Files.exists(targetFile)) {
                 LOG.debug("      File already exists, skipping download: " + targetFile);
             } else {
-                Utils.sleep(500);
+                // Utils.sleep(500);
                 LOG.info("      Downloading: " + fullyQualifiedUrl);
                 Page page = webClient.getPage(fullyQualifiedUrl);
                 Files.copy(page.getWebResponse().getContentAsStream(), targetFile);
