@@ -86,7 +86,7 @@ public class Publisher {
                 .build();
 
         HttpResponse<String> checkResponse = httpClient.send(check, BodyHandlers.ofString());
-        if (checkResponse.statusCode() >= 200 && checkResponse.statusCode() < 399) {
+        if (checkResponse.statusCode() >= 200 && checkResponse.statusCode() <= 399) {
             LOG.debug("Skipping duplicate upload " + targetUrl + " : Response code was " + checkResponse.statusCode());
             return;
         }
