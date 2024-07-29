@@ -32,7 +32,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 /**
  * Component that scrapes content from a remote maven repository using the
  * "index"-style HTML content pages and mirrors it onto the local filesystem.
- * 
+ *
  * @author mike
  */
 @Component
@@ -46,7 +46,7 @@ public class Scraper {
             Arrays.asList("md5", "sha1", "asc", "sha256", "sha512"));
 
     private static Set<String> FILENAME_BLACKLIST = new HashSet<>(
-            Arrays.asList("maven-metadata.xml", "archetype-catalog.xml"));
+            Arrays.asList("archetype-catalog.xml"));
 
     @Value("${source.root-url}")
     private String rootUrl;
